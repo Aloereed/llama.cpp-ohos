@@ -491,8 +491,9 @@ static ggml_backend_reg_t ggml_backend_load_best(const char * name, bool silent,
     std::wstring file_prefix = backend_filename_prefix() + utf8_to_utf16(name) + L"-";
     std::vector<std::wstring> search_paths;
     if (user_search_path == nullptr) {
-        search_paths.push_back(L"." + path_separator());
-        search_paths.push_back(get_executable_path());
+        // search_paths.push_back(L"." + path_separator());
+        // search_paths.push_back(get_executable_path());
+        search_paths.push_back(L"/data/storage/el1/bundle/libs/arm64/");
     } else {
         search_paths.push_back(utf8_to_utf16(user_search_path) + path_separator());
     }
@@ -562,17 +563,17 @@ void ggml_backend_load_all_from_path(const char * dir_path) {
     bool silent = false;
 #endif
 
-    ggml_backend_load_best("blas", silent, dir_path);
-    ggml_backend_load_best("cann", silent, dir_path);
-    ggml_backend_load_best("cuda", silent, dir_path);
-    ggml_backend_load_best("hip", silent, dir_path);
-    ggml_backend_load_best("kompute", silent, dir_path);
-    ggml_backend_load_best("metal", silent, dir_path);
-    ggml_backend_load_best("rpc", silent, dir_path);
-    ggml_backend_load_best("sycl", silent, dir_path);
-    ggml_backend_load_best("vulkan", silent, dir_path);
-    ggml_backend_load_best("opencl", silent, dir_path);
-    ggml_backend_load_best("musa", silent, dir_path);
+    // ggml_backend_load_best("blas", silent, dir_path);
+    // ggml_backend_load_best("cann", silent, dir_path);
+    // ggml_backend_load_best("cuda", silent, dir_path);
+    // ggml_backend_load_best("hip", silent, dir_path);
+    // ggml_backend_load_best("kompute", silent, dir_path);
+    // ggml_backend_load_best("metal", silent, dir_path);
+    // ggml_backend_load_best("rpc", silent, dir_path);
+    // ggml_backend_load_best("sycl", silent, dir_path);
+    // ggml_backend_load_best("vulkan", silent, dir_path);
+    // ggml_backend_load_best("opencl", silent, dir_path);
+    // ggml_backend_load_best("musa", silent, dir_path);
     ggml_backend_load_best("cpu", silent, dir_path);
     // check the environment variable GGML_BACKEND_PATH to load an out-of-tree backend
     const char * backend_path = std::getenv("GGML_BACKEND_PATH");

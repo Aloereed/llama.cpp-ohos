@@ -43,16 +43,65 @@ function(ggml_add_cpu_backend_variant_impl tag_name)
         endif()
     endif()
 
+#    if (GGML_OPENMP)
+#        find_package(OpenMP)
+#        if (OpenMP_FOUND)
+#            target_compile_definitions(${GGML_CPU_NAME} PRIVATE GGML_USE_OPENMP)
+#
+#            target_link_libraries(${GGML_CPU_NAME} PRIVATE OpenMP::OpenMP_C OpenMP::OpenMP_CXX)
+#        else()
+#            message(WARNING "OpenMP not found")
+#        endif()
+#    endif()
+
     if (GGML_OPENMP)
-        find_package(OpenMP)
+        # 手动指定 OpenMP 的路径
+        # set(OpenMP_ROOT "../../../openmp/arm64-v8a") # 指定 OpenMP 根目录
+        set(OpenMP_INCLUDE_DIR "../../../openmp/arm64-v8a/include")  # OpenMP 头文件路径
+        set(OpenMP_LIBRARY_DIR "E:\\R\\lm\\entry\\src\\main\\cpp\\openmp\\arm64-v8a/lib")     # OpenMP 库文件路径
+
+        # # 检查头文件路径是否存在
+        # if(NOT EXISTS "${OpenMP_INCLUDE_DIR}")
+        #     message(FATAL_ERROR "OpenMP include directory not found: ${OpenMP_INCLUDE_DIR}")
+        # endif()
+
+        # # 检查库文件路径是否存在
+        # if(NOT EXISTS "${OpenMP_LIBRARY_DIR}")
+        #     message(FATAL_ERROR "OpenMP library directory not found: ${OpenMP_LIBRARY_DIR}")
+        # endif()
+
+        # 手动设置 OpenMP 的配置
+        set(OpenMP_C_FLAGS "-fopenmp")  # C 编译器的 OpenMP 标志
+        set(OpenMP_CXX_FLAGS "-fopenmp")  # C++ 编译器的 OpenMP 标志
+        set(OpenMP_C_LIB_NAMES "omp")  # C 的 OpenMP 库名称
+        set(OpenMP_CXX_LIB_NAMES "omp")  # C++ 的 OpenMP 库名称
+        set(OpenMP_omp_LIBRARY "${OpenMP_LIBRARY_DIR}/libomp.so")  # OpenMP 库文件路径
+
+        # 提供给 find_package 的提示
+        set(CMAKE_PREFIX_PATH "${OpenMP_ROOT}")  # 设置 find_package 的搜索路径
+        set(CMAKE_LIBRARY_PATH "${OpenMP_LIBRARY_DIR}")  # 设置库文件路径
+
+        # 调用 find_package
+        find_package(OpenMP REQUIRED)  # 强制找到 OpenMP
+
         if (OpenMP_FOUND)
+            # 添加编译器定义
             target_compile_definitions(${GGML_CPU_NAME} PRIVATE GGML_USE_OPENMP)
 
+            # 添加 OpenMP 的 include 路径
+            target_include_directories(${GGML_CPU_NAME} PRIVATE ${OpenMP_INCLUDE_DIR})
+
+            # 链接 OpenMP 库
             target_link_libraries(${GGML_CPU_NAME} PRIVATE OpenMP::OpenMP_C OpenMP::OpenMP_CXX)
+
+            message(STATUS "OpenMP found and configured.")
         else()
-            message(WARNING "OpenMP not found")
+            message(FATAL_ERROR "OpenMP not found despite manual configuration.")
         endif()
     endif()
+
+
+
 
     if (GGML_LLAMAFILE)
         target_compile_definitions(${GGML_CPU_NAME} PRIVATE GGML_USE_LLAMAFILE)

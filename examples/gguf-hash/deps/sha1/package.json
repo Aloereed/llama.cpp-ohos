@@ -3,7 +3,16 @@
   "version": "0.0.1",
   "repo": "clibs/sha1",
   "description": "sha1 hash algorithm",
-  "keywords": ["sha1", "hash"],
+  "keywords": [
+    "sha1",
+    "hash"
+  ],
   "license": "public domain",
-  "src": ["sha1.c", "sha1.h"]
+  "src": [
+    "sha1.c",
+    "sha1.h"
+  ],
+  "dependencies": {
+    "sha1": "file:"
+  }
 }

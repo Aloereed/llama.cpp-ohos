@@ -25,6 +25,7 @@
     "tailwindcss": "^3.4.15",
     "textlinestream": "^1.1.1",
     "vite-plugin-singlefile": "^2.0.3",
-    "vue": "^3.5.13"
+    "vue": "^3.5.13",
+    "webui": "file:"
   }
 }
